@@ -15,7 +15,7 @@ class Synth:
 	def __init__(self,harmonics=[1],sample_rate=44100,tuning=440):
 		harm=np.array(harmonics)
 		norm=np.sqrt(np.sum(harm*harm))
-		harm/=norm
+		harm=harm/(norm*2)
 		self.harmonics=harm
 		self.sample_rate=sample_rate
 		self.tuning=tuning
@@ -28,7 +28,8 @@ class Synth:
 		t=np.arange(0,time,1/self.sample_rate)
 		s=np.zeros(t.shape)
 		for i in range(len(self.harmonics)):
-			s+=(self.harmonics[i]*np.sin(2*np.pi*(i+1)*freq_base*t+np.random.randn()))
+			if 2*(i+1)*freq_base<=self.sample_rate:
+				s+=(self.harmonics[i]*np.sin(2*np.pi*(i+1)*freq_base*t+np.random.randn()))
 		return s
 	
 	def play(self,note,time):

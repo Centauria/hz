@@ -20,6 +20,10 @@ import numpy as np
 	help="""The sustain time of the note in seconds.
 	Default: 1
 	""")
+@click.option('-h','--harmonics',default='1,1,1',\
+	help="""The harmonics that the wave have.
+	Default: [1,1,1]
+	""")
 @click.option('-T','--tuning',default=440,\
 	help="""The frequency of note A4 in Hz.
 	Default: 440
@@ -28,9 +32,11 @@ import numpy as np
 	help="""The sample rate of the audio playback.
 	Default: 44100
 	""")
-def hz(note,time,tuning,sample_rate):
+def hz(note,time,harmonics,tuning,sample_rate):
 	n=util.Note(note)
-	synth=synthesizer.Synth(np.sinc(np.arange(0,10*np.pi,np.pi/5)),sample_rate,tuning)
+	harm=list(map(float,harmonics.split(',')))
+	# synth=synthesizer.Synth(np.sinc(np.arange(0,10*np.pi,np.pi/5)),sample_rate,tuning)
+	synth=synthesizer.Synth(harm,sample_rate,tuning)
 	print(n)
 	synth.play(n,time)
 
